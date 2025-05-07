@@ -1,14 +1,16 @@
-REM 此批次檔用於持續檢查指定主機的連線狀態，並在連線失敗時顯示訊息
-REM 使用方法：show-info-msg-when-no-connection.bat [目標主機]（預設為 localhost）
-
 @ECHO OFF
-
-REM 設定預設值為 localhost
-set "target=localhost"
 SETLOCAL EnableDelayedExpansion
 
 REM 設定命令提示字元的代碼頁為UTF-8，以正確顯示中文
 CHCP 65001 > NUL
+
+ECHO.
+ECHO 此批次檔用於持續檢查指定主機的連線狀態，並在連線失敗時顯示訊息
+ECHO 使用方法：show-info-msg-when-no-connection.bat [目標主機]（預設為 localhost）
+ECHO.
+
+REM 設定預設值為 localhost
+set "target=localhost"
 
 REM 檢查是否有輸入參數
 if not "%~1"=="" (

@@ -1,8 +1,13 @@
-REM 此批次檔用於持續 ping 指定目標並在輸出中加入時間戳記
-REM 使用方法：ping-with-timestamp.bat [目標主機]（預設為 localhost）
-
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
+
+REM 設定命令提示字元的代碼頁為UTF-8，以正確顯示中文
+CHCP 65001 > NUL
+
+ECHO.
+ECHO 此批次檔用於持續 ping 指定目標並在輸出中加入時間戳記
+ECHO 使用方法：ping-with-timestamp.bat [目標主機]（預設為 localhost）
+ECHO.
 
 REM 設定預設值為 localhost
 set "target=localhost"
