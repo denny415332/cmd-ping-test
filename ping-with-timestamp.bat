@@ -1,3 +1,6 @@
+REM 此批次檔用於持續 ping 指定目標並在輸出中加入時間戳記
+REM 使用方法：ping-with-timestamp.bat [目標主機]（預設為 localhost）
+
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 

@@ -1,3 +1,6 @@
+REM 此批次檔用於持續 ping 指定目標直到連線成功，可用於監控網路恢復狀態
+REM 使用方法：ping-while-no-connection.bat [目標主機]（預設為 localhost）
+
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 
