@@ -1,0 +1,57 @@
+@ECHO OFF
+SETLOCAL EnableDelayedExpansion
+
+REM 設定命令提示字元的代碼頁為UTF-8，以正確顯示中文
+CHCP 65001 > NUL
+
+REM 設定預設值為 localhost
+set "target=localhost"
+
+REM 檢查是否有輸入參數
+if not "%~1"=="" (
+    set "target=%~1"
+)
+
+ECHO 開始檢測連線到 %target%...
+ECHO.
+
+:LOOP
+REM Ping 目標主機並將輸出導向到臨時檔案
+ping -n 1 %target% > temp.txt
+
+REM 讀取並替換文字
+type temp.txt | findstr /v "Ping statistics" | findstr /v "Packets:" | findstr /v "Approximate" | findstr /v "Minimum" | findstr /v "Maximum" | findstr /v "Average" > temp2.txt
+
+REM 替換文字並顯示
+for /f "tokens=*" %%a in (temp2.txt) do (
+    set "line=%%a"
+    set "line=!line:Reply from=收到來自!"
+    set "line=!line:bytes=位元組!"
+    set "line=!line:time=時間!"
+    set "line=!line:TTL=存活時間!"
+    set "line=!line:Request timed out=請求超時!"
+    set "line=!line:Destination host unreachable=目標主機無法到達!"
+    echo !line!
+)
+
+REM 刪除臨時檔案
+del temp.txt temp2.txt
+
+REM 如果沒有回應，則等待1秒
+IF ERRORLEVEL 1 (
+    TIMEOUT /T 1 /NOBREAK
+)
+
+REM 如果收到回應，則結束程式並顯示時間
+IF ERRORLEVEL 0 (
+    ECHO.
+    ECHO 在 %DATE% %TIME% 收到回應
+    GOTO END
+)
+
+REM 回到迴圈開始
+GOTO LOOP
+
+:END
+ECHO.
+ECHO 已結束
