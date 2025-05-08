@@ -5,16 +5,23 @@ REM 設定命令提示字元的代碼頁為UTF-8，以正確顯示中文
 CHCP 65001 > NUL
 
 ECHO.
-ECHO 此批次檔用於持續 ping 指定目標直到連線成功，可用於監控網路恢復狀態
-ECHO 使用方法：ping-while-no-connection.bat [目標主機]（預設為 localhost）
+ECHO "此批次檔用於持續 ping 指定目標直到連線成功，可用於監控網路恢復狀態"
+ECHO "使用方法: ping-while-no-connection.bat [目標主機] [等待時間]"
+ECHO "[目標主機] 預設為 localhost"
+ECHO "[等待時間] 預設為 1 秒"
 ECHO.
 
 REM 設定預設值為 localhost
 set "target=localhost"
+REM 設定預設等待時間為 1 秒
+set "wait_time=1"
 
 REM 檢查是否有輸入參數
 if not "%~1"=="" (
     set "target=%~1"
+)
+if not "%~2"=="" (
+    set "wait_time=%~2"
 )
 
 ECHO 開始檢測連線到 %target%...
@@ -42,9 +49,9 @@ for /f "tokens=*" %%a in (temp2.txt) do (
 REM 刪除臨時檔案
 del temp.txt temp2.txt
 
-REM 如果沒有回應，則等待1秒
+REM 如果沒有回應，則等待 %wait_time% 秒
 IF ERRORLEVEL 1 (
-    TIMEOUT /T 1 /NOBREAK
+    TIMEOUT /T %wait_time% /NOBREAK
 )
 
 REM 如果收到回應，則結束程式並顯示時間
