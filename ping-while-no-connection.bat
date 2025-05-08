@@ -12,6 +12,7 @@ ECHO "[等待時間] 預設為 1 秒"
 ECHO.
 
 REM 設定預設值為 localhost
+REM 可用數值包含: c02240073, c02240074
 set "target=localhost"
 REM 設定預設等待時間為 1 秒
 set "wait_time=1"
@@ -47,7 +48,7 @@ for /f "tokens=*" %%a in (temp2.txt) do (
 )
 
 REM 刪除臨時檔案
-del temp.txt temp2.txt
+DEL temp.txt temp2.txt
 
 REM 如果沒有回應，則等待 %wait_time% 秒
 IF ERRORLEVEL 1 (

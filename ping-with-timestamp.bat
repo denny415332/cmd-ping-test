@@ -12,6 +12,7 @@ ECHO "[等待時間] 預設為 1 秒"
 ECHO.
 
 REM 設定預設值為 localhost
+REM 可用數值包含: c02240073, c02240074
 set "target=localhost"
 REM 設定預設等待時間為 1 秒
 set "wait_time=1"
