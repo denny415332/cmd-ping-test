@@ -47,23 +47,19 @@ for /f "tokens=*" %%a in (temp2.txt) do (
     echo !line!
 )
 
-REM 刪除臨時檔案
-DEL temp.txt temp2.txt
-
-REM 如果沒有回應，則等待 %wait_time% 秒
+REM 檢查連線狀態
+findstr "Reply from" temp.txt > nul
 IF ERRORLEVEL 1 (
+    DEL temp.txt temp2.txt
     TIMEOUT /T %wait_time% /NOBREAK
+    GOTO LOOP
 )
 
 REM 如果收到回應，則結束程式並顯示時間
-IF ERRORLEVEL 0 (
-    ECHO.
-    ECHO 在 %DATE% %TIME% 收到回應
-    GOTO END
-)
-
-REM 回到迴圈開始
-GOTO LOOP
+DEL temp.txt temp2.txt
+ECHO.
+ECHO 在 %DATE% %TIME% 收到回應
+GOTO END
 
 :END
 ECHO.
