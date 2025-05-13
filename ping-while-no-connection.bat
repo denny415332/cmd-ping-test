@@ -69,6 +69,7 @@ REM 如果收到回應，則結束程式並顯示時間
 @REM DEL %temp_file% %temp_file2%
 ECHO.
 ECHO 在 %DATE% %TIME% 收到回應
+MSG * "在 %DATE% %TIME% 收到回應"
 GOTO END
 
 :END
