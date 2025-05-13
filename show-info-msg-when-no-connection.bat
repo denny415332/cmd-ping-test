@@ -29,11 +29,14 @@ ECHO 開始檢測連線到 %target%...
 ECHO.
 
 :LOOP
+REM 設定臨時檔案名稱
+SET "temp_file=temp_show_info_msg_when_no_connection.txt"
+
 REM Ping 目標主機並將輸出導向到臨時檔案
-ping -n 1 %target% > temp.txt
+ping -n 1 %target% > %temp_file%
 
 REM 檢查 ping 的結果
-type temp.txt | find "Reply from" > nul
+type %temp_file% | find "Reply from" > nul
 IF %ERRORLEVEL% EQU 0 (
     REM 連線正常
     ECHO [%DATE% %TIME%] 連線到 %target% 正常
@@ -43,8 +46,8 @@ IF %ERRORLEVEL% EQU 0 (
     MSG * /time:%wait_time% "警告：無法連線到 %target%！請檢查網路連線。"
 )
 
-REM 刪除臨時檔案
-del temp.txt
+@REM REM 刪除臨時檔案
+@REM del %temp_file%
 
 REM 等待 %wait_time% 秒後再次檢查
 TIMEOUT /T %wait_time% /NOBREAK > nul

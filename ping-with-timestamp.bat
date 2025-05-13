@@ -27,17 +27,20 @@ if not "%~2"=="" (
 
 
 :LOOP
+REM 設定臨時檔案名稱
+SET "temp_file=temp_ping_with_timestamp.txt"
+
 REM Ping 目標主機並將輸出導向臨時檔案
-ping -n 1 %target% > temp.txt
+ping -n 1 %target% > %temp_file%
 
 REM 讀取臨時檔案的每一行並加上時間戳記
-FOR /F "tokens=*" %%A IN (temp.txt) DO (
+FOR /F "tokens=*" %%A IN (%temp_file%) DO (
     SET "DATE_TIME=!DATE! !TIME!"
     ECHO [!DATE_TIME!] %%A
 )
 
 REM 刪除臨時檔案
-DEL temp.txt
+@REM DEL %temp_file%
 
 REM 輸出空行
 ECHO.

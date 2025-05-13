@@ -29,14 +29,24 @@ ECHO 開始檢測連線到 %target%...
 ECHO.
 
 :LOOP
+REM 設定臨時檔案名稱
+SET "temp_file=temp_ping_while_no_connection.txt"
+SET "temp_file2=temp2_ping_while_no_connection.txt"
+
 REM Ping 目標主機並將輸出導向到臨時檔案
-ping -n 1 %target% > temp.txt
+ping -n 1 %target% > %temp_file%
 
 REM 讀取並替換文字
-type temp.txt | findstr /v "Ping statistics" | findstr /v "Packets:" | findstr /v "Approximate" | findstr /v "Minimum" | findstr /v "Maximum" | findstr /v "Average" > temp2.txt
+type %temp_file% | ^
+findstr /v "Ping statistics" | ^
+findstr /v "Packets:" | ^
+findstr /v "Approximate" | ^
+findstr /v "Minimum" | ^
+findstr /v "Maximum" | ^
+findstr /v "Average" > %temp_file2%
 
 REM 替換文字並顯示
-for /f "tokens=*" %%a in (temp2.txt) do (
+for /f "tokens=*" %%a in (%temp_file2%) do (
     set "line=%%a"
     set "line=!line:Reply from=收到來自!"
     set "line=!line:bytes=位元組!"
@@ -48,15 +58,15 @@ for /f "tokens=*" %%a in (temp2.txt) do (
 )
 
 REM 檢查連線狀態
-findstr "Reply from" temp.txt > nul
+findstr "Reply from" %temp_file% > nul
 IF ERRORLEVEL 1 (
-    DEL temp.txt temp2.txt
+    @REM DEL %temp_file% %temp_file2%
     TIMEOUT /T %wait_time% /NOBREAK
     GOTO LOOP
 )
 
 REM 如果收到回應，則結束程式並顯示時間
-DEL temp.txt temp2.txt
+@REM DEL %temp_file% %temp_file2%
 ECHO.
 ECHO 在 %DATE% %TIME% 收到回應
 GOTO END
