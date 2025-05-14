@@ -36,7 +36,7 @@ REM Ping 目標主機並將輸出導向到臨時檔案
 ping -n 1 %target% > %temp_file%
 
 REM 檢查 ping 的結果
-type %temp_file% | find "Reply from" > nul
+type %temp_file% | find "Reply from" | find "time=" > nul
 IF %ERRORLEVEL% EQU 0 (
     REM 連線正常
     ECHO [%DATE% %TIME%] 連線到 %target% 正常
