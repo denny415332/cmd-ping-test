@@ -31,7 +31,7 @@ ECHO.
 :LOOP
 REM 設定臨時檔案名稱
 SET "temp_file=temp_ping_while_no_connection.txt"
-SET "temp_file2=temp2_ping_while_no_connection.txt"
+SET "temp_file2=temp_ping_while_no_connection_2.txt"
 
 REM Ping 目標主機並將輸出導向到臨時檔案
 ping -n 1 %target% > %temp_file%
