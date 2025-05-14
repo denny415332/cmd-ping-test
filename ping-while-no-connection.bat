@@ -29,6 +29,8 @@ ECHO 開始檢測連線到 %target%...
 ECHO.
 
 :LOOP
+REM 重置計數器
+set "count=0"
 REM 設定臨時檔案名稱
 SET "temp_file=temp_ping_while_no_connection.txt"
 SET "temp_file2=temp_ping_while_no_connection_2.txt"
@@ -60,8 +62,14 @@ findstr /v "Average" > %temp_file2%
 REM 檢查連線狀態
 type %temp_file% | find "Reply from" | find "time" > nul
 IF ERRORLEVEL 1 (
+    ECHO [%DATE% %TIME%] 無法連線到 %target%，等待 %wait_time% 秒後重試...
+    for /f "tokens=*" %%a in ('type %temp_file% ^| findstr /v "^$"') do (
+        set /a count+=1
+        if !count! leq 2 echo %%a
+    )
+    ECHO.
+    
     @REM DEL %temp_file% %temp_file2%
-    ECHO 未收到 %target% 回應，等待 %wait_time% 秒後重試...
     TIMEOUT /T %wait_time% /NOBREAK >nul
     GOTO LOOP
 )
