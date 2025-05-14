@@ -58,7 +58,7 @@ findstr /v "Average" > %temp_file2%
 @REM )
 
 REM 檢查連線狀態
-type %temp_file% | find "Reply from" | find "time=" > nul
+type %temp_file% | find "Reply from" | find "time" > nul
 IF ERRORLEVEL 1 (
     @REM DEL %temp_file% %temp_file2%
     ECHO 未收到 %target% 回應，等待 %wait_time% 秒後重試...
