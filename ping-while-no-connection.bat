@@ -45,31 +45,32 @@ findstr /v "Minimum" | ^
 findstr /v "Maximum" | ^
 findstr /v "Average" > %temp_file2%
 
-REM 替換文字並顯示
-for /f "tokens=*" %%a in (%temp_file2%) do (
-    set "line=%%a"
-    set "line=!line:Reply from=收到來自!"
-    set "line=!line:bytes=位元組!"
-    set "line=!line:time=時間!"
-    set "line=!line:TTL=存活時間!"
-    set "line=!line:Request timed out=請求超時!"
-    set "line=!line:Destination host unreachable=目標主機無法到達!"
-    echo !line!
-)
+@REM REM 替換文字並顯示
+@REM for /f "tokens=*" %%a in (%temp_file2%) do (
+@REM     set "line=%%a"
+@REM     set "line=!line:Reply from=收到來自!"
+@REM     set "line=!line:bytes=位元組!"
+@REM     set "line=!line:time=時間!"
+@REM     set "line=!line:TTL=存活時間!"
+@REM     set "line=!line:Request timed out=請求超時!"
+@REM     set "line=!line:Destination host unreachable=目標主機無法到達!"
+@REM     echo !line!
+@REM )
 
 REM 檢查連線狀態
 findstr "Reply from" %temp_file% > nul
 IF ERRORLEVEL 1 (
     @REM DEL %temp_file% %temp_file2%
-    TIMEOUT /T %wait_time% /NOBREAK
+    ECHO 未收到回應，等待 %wait_time% 秒後重試...
+    TIMEOUT /T %wait_time% /NOBREAK >nul
     GOTO LOOP
 )
 
 REM 如果收到回應，則結束程式並顯示時間
 @REM DEL %temp_file% %temp_file2%
 ECHO.
-ECHO 在 %DATE% %TIME% 收到回應
-MSG * "在 %DATE% %TIME% 收到回應"
+ECHO %target% 在 %DATE% %TIME% 收到回應
+MSG * "%target% 在 %DATE% %TIME% 收到回應"
 GOTO END
 
 :END
